@@ -218,7 +218,7 @@ public class DeviceScanActivity extends AppCompatActivity implements AdapterView
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
-        final Intent intent = new Intent(this, DeviceControlActivity.class);
+        final Intent intent = new Intent(this, DeviceReadingsActivity.class);
         intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
         if (mScanning) {

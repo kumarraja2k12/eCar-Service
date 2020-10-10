@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.example.blegattclient.R;
 import com.example.blegattclient.ble.BluetoothLeService;
-import com.example.blegattclient.ble.SampleGattAttributes;
+import com.example.blegattclient.ble.GattUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -254,10 +254,10 @@ public class DeviceControlActivity extends AppCompatActivity {
         for (BluetoothGattService gattService : gattServices) {
             HashMap<String, String> currentServiceData = new HashMap<String, String>();
             uuid = gattService.getUuid().toString();
-            if (SampleGattAttributes.contains(uuid))
+            if (GattUtils.contains(uuid))
             {
                 currentServiceData.put(
-                        LIST_NAME, SampleGattAttributes.lookup(uuid, unknownServiceString));
+                        LIST_NAME, GattUtils.lookup(uuid));
                 currentServiceData.put(LIST_UUID, uuid);
                 groupItemsData.add(currentServiceData);
 
@@ -273,11 +273,11 @@ public class DeviceControlActivity extends AppCompatActivity {
                     HashMap<String, String> currentCharaData = new HashMap<String, String>();
                     uuid = gattCharacteristic.getUuid().toString();
 
-                    if (SampleGattAttributes.contains(uuid))
+                    if (GattUtils.contains(uuid))
                     {
                         charas.add(gattCharacteristic);
                         currentCharaData.put(
-                                LIST_NAME, SampleGattAttributes.lookup(uuid, unknownCharaString));
+                                LIST_NAME, GattUtils.lookup(uuid));
                         currentCharaData.put(LIST_UUID, uuid);
                         gattCharacteristicGroupData.add(currentCharaData);
                     }
