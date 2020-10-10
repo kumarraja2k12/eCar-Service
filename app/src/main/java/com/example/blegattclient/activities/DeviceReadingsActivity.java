@@ -1,7 +1,6 @@
 package com.example.blegattclient.activities;
 
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -25,7 +23,6 @@ import com.example.blegattclient.ble.GattUtils;
 import com.example.blegattclient.storage.preferences.Preferences;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public class DeviceReadingsActivity extends BaseActivity {
@@ -123,10 +120,10 @@ public class DeviceReadingsActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
+        /*if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
-        }
+        }*/
     }
 
     @Override
@@ -187,13 +184,18 @@ public class DeviceReadingsActivity extends BaseActivity {
         return str.replaceAll("/[^0-9]/g", "");
     }
 
-    private void displayData(String data) {
+    private void displayData(final String data) {
         if (data != null && !data.isEmpty()) {
-            mDataField.setText(
-                    new Date().toString() + ": " +
-                    data +
-                    System.getProperty("line.separator") +
-                    mDataField.getText());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mDataField.setText(
+                            new Date().toString() + ": " +
+                                    data +
+                                    System.getProperty("line.separator") +
+                                    mDataField.getText());
+                }
+            });
         }
     }
 
@@ -206,10 +208,10 @@ public class DeviceReadingsActivity extends BaseActivity {
         // Loops through available GATT Services.
         for (BluetoothGattService gattService : gattServices) {
             uuid = gattService.getUuid().toString();
-            if (GattUtils.contains(uuid))
+            //if (GattUtils.contains(uuid))
             {
                 //Service discovered
-                showShortToast(GattUtils.lookup(uuid) + " discovered..");
+                //showShortToast(GattUtils.lookup(uuid) + " discovered..");
                 List<BluetoothGattCharacteristic> gattCharacteristics =
                         gattService.getCharacteristics();
                 // Loops through available Characteristics.

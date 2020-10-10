@@ -186,6 +186,9 @@ public class DeviceScanActivity extends AppCompatActivity implements AdapterView
             case R.id.menu_stop:
                 scanLeDevice(false);
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
         return true;
     }

@@ -10,7 +10,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showDialog(String message, DialogInterface.OnClickListener listener) {
 
-        AlertDialog alertDialog1 = new AlertDialog.Builder(
+        final AlertDialog alertDialog1 = new AlertDialog.Builder(
                 BaseActivity.this).create();
 
         // Setting Dialog Title
@@ -28,15 +28,31 @@ public class BaseActivity extends AppCompatActivity {
         } : listener);
 
         /* Showing Alert Message */
-        alertDialog1.show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                alertDialog1.show();
+            }
+        });
+    }
+
+    public void showLongToast(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText( BaseActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
-    public void showLongToast(String message) {
-        Toast.makeText( BaseActivity.this, message, Toast.LENGTH_LONG).show();
-    }
+    public void showShortToast(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText( BaseActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
 
-    public void showShortToast(String message) {
-        Toast.makeText( BaseActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

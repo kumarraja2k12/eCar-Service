@@ -254,7 +254,7 @@ public class DeviceControlActivity extends AppCompatActivity {
         for (BluetoothGattService gattService : gattServices) {
             HashMap<String, String> currentServiceData = new HashMap<String, String>();
             uuid = gattService.getUuid().toString();
-            if (GattUtils.contains(uuid))
+            //if (GattUtils.contains(uuid))
             {
                 currentServiceData.put(
                         LIST_NAME, GattUtils.lookup(uuid));
@@ -273,7 +273,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                     HashMap<String, String> currentCharaData = new HashMap<String, String>();
                     uuid = gattCharacteristic.getUuid().toString();
 
-                    if (GattUtils.contains(uuid))
+                    //if (GattUtils.contains(uuid))
                     {
                         charas.add(gattCharacteristic);
                         currentCharaData.put(
