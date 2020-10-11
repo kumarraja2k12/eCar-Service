@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.blegattclient">
+    package="com.example.careservice">
 
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
@@ -17,20 +17,20 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.DeviceScanActivity"/>
-        <activity android:name=".activities.SplashActivity" android:theme="@style/SplashTheme">
+        <activity android:name="com.example.careservice.activities.DeviceScanActivity"/>
+        <activity android:name="com.example.careservice.activities.SplashActivity" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DeviceControlActivity"/>
-        <activity android:name=".activities.RegisterActivity"/>
-        <activity android:name=".activities.MenuActivity"/>
-        <activity android:name=".activities.DeviceReadingsActivity"/>
-        <activity android:name=".activities.HistoryActivity"/>
-        <service android:name=".ble.BluetoothLeService" android:enabled="true"/>
-        <service android:name=".location.LocationService" android:enabled="true" />
+        <activity android:name="com.example.careservice.activities.DeviceControlActivity"/>
+        <activity android:name="com.example.careservice.activities.RegisterActivity"/>
+        <activity android:name="com.example.careservice.activities.MenuActivity"/>
+        <activity android:name="com.example.careservice.activities.DeviceReadingsActivity"/>
+        <activity android:name="com.example.careservice.activities.HistoryActivity"/>
+        <service android:name="com.example.careservice.ble.BluetoothLeService" android:enabled="true"/>
+        <service android:name="com.example.careservice.location.LocationService" android:enabled="true" />
     </application>
 
 </manifest>
