@@ -1,5 +1,6 @@
 package com.example.blegattclient;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.widget.Toast;
 
@@ -7,6 +8,42 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
+
+    private ProgressDialog progressDialog;
+    public void showProgressDialog() {
+        showProgressDialog(null);
+    }
+
+    public void showProgressDialog(String message) {
+        if(progressDialog == null) {
+            progressDialog = new ProgressDialog(BaseActivity.this);
+            progressDialog.setMessage((message == null) ? "Scanning...." : message);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        }
+        if(!progressDialog.isShowing()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.show();
+                }
+            });
+        }
+    }
+    
+    public void hideProgressDialog() {
+        if(progressDialog != null && progressDialog.isShowing()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                }
+            });
+        }
+    }
+
+    public void showDialog(String message) {
+        showDialog(message, null);
+    }
 
     public void showDialog(String message, DialogInterface.OnClickListener listener) {
 
@@ -20,7 +57,7 @@ public class BaseActivity extends AppCompatActivity {
         alertDialog1.setMessage(message);
 
         // Setting OK Button
-        alertDialog1.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", (listener == null) ? new DialogInterface.OnClickListener() {
+        alertDialog1.setButton(AlertDialog.BUTTON_POSITIVE, "OK", (listener == null) ? new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

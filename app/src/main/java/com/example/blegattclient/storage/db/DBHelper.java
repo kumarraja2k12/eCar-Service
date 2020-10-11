@@ -25,8 +25,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String READINGS_COLUMN_TIMESTAMP = "timestamp";
     public static final String READINGS_COLUMN_CLOUD_UPLOAD = "cloud_upload";
 
-    public DBHelper(Context context) {
+    private DBHelper(Context context) {
         super(context, DATABASE_NAME , null, 1);
+    }
+
+    private static DBHelper instance;
+    public static DBHelper getInstance(Context applicationContext) {
+        if(instance == null) {
+            instance = new DBHelper(applicationContext);
+        }
+        return instance;
     }
 
     @Override
@@ -100,6 +108,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean updateReading(int cloudUpdate, String timestamp) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(READINGS_COLUMN_CLOUD_UPLOAD, cloudUpdate);
+
+        db.update(READINGS_TABLE_NAME, contentValues,
+                READINGS_COLUMN_TIMESTAMP + " = " + timestamp, null );
+        return true;
+    }
+
     /*public Integer deleteContact (Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete("contacts",
@@ -139,6 +159,31 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from " + READINGS_TABLE_NAME +
                 " where "+ READINGS_COLUMN_VALUE_TYPE + " = 'level'", null );
+        res.moveToFirst();
+
+        while(res.isAfterLast() == false) {
+            ReadingModel reading = new ReadingModel();
+
+            reading.id = res.getInt(res.getColumnIndex(READINGS_COLUMN_ID));
+            reading.vehicleNumber = res.getString(res.getColumnIndex(READINGS_COLUMN_VEHICLE_NUMBER));
+            reading.valueType = res.getString(res.getColumnIndex(READINGS_COLUMN_VALUE_TYPE));
+            reading.value = res.getString(res.getColumnIndex(READINGS_COLUMN_VALUE));
+            reading.latitude = res.getString(res.getColumnIndex(READINGS_COLUMN_LATITUDE));
+            reading.longitude = res.getString(res.getColumnIndex(READINGS_COLUMN_LONGITUDE));
+            reading.timestamp = res.getString(res.getColumnIndex(READINGS_COLUMN_TIMESTAMP));
+            reading.cloudUpdate = res.getInt(res.getColumnIndex(READINGS_COLUMN_CLOUD_UPLOAD));
+
+            array_list.add(reading);
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+    public List<ReadingModel> getAllReadings() {
+        List<ReadingModel> array_list = new ArrayList<ReadingModel>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + READINGS_TABLE_NAME + " ORDER BY " + READINGS_COLUMN_ID + " DESC" , null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false) {

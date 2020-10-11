@@ -53,7 +53,7 @@ public class RegisterActivity extends BaseActivity {
                 model.getText().toString());
 
         //TODO:: Show progress dialog
-        IoTService.GetIoTService(getApplicationContext()).RegisterVehicle(request, new IServiceCallback() {
+        IoTService.getInstance(getApplicationContext()).RegisterVehicle(request, new IServiceCallback() {
             @Override
             public void OnCompleted(Object response) {
                 RegisterVehicleResponse registeredVehicle = (RegisterVehicleResponse)response;

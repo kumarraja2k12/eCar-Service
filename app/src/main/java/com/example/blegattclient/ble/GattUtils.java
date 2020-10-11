@@ -20,6 +20,14 @@ public class GattUtils {
         return attributes.containsKey(uuid.toLowerCase());
     }
 
+    public static boolean isFluidLevelUUID(String uuid) {
+        return lookup(uuid).equalsIgnoreCase("Fluid level");
+    }
+
+    public static boolean isCOLevelUUID(String uuid) {
+        return lookup(uuid).equalsIgnoreCase("CO level");
+    }
+
     public static String lookup(String uuid) {
         return attributes.get(uuid.toLowerCase());
     }

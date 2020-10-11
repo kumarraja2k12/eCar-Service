@@ -42,6 +42,8 @@ public class BluetoothLeService extends Service {
             "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le.EXTRA_DATA";
+    public final static String EXTRA_UUID =
+            "com.example.bluetooth.le.EXTRA_UUID";
 
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
@@ -104,6 +106,7 @@ public class BluetoothLeService extends Service {
             if (data != null && data.length > 0) {
                 String dataString = ConvertByteArrayToHex(data);
                 intent.putExtra(EXTRA_DATA, dataString);
+                intent.putExtra(EXTRA_UUID, characteristic.getUuid().toString());
             }
         }
         sendBroadcast(intent);
@@ -257,12 +260,13 @@ public class BluetoothLeService extends Service {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
         }
-        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
 
-        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(characteristic.getUuid());
-        if(descriptor != null) {
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-            mBluetoothGatt.writeDescriptor(descriptor);
+        mBluetoothGatt.setCharacteristicNotification(characteristic, true);
+        for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()) {
+            if (descriptor != null) {
+                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                mBluetoothGatt.writeDescriptor(descriptor);
+            }
         }
     }
 

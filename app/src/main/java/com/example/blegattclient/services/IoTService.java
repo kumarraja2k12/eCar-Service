@@ -1,6 +1,7 @@
 package com.example.blegattclient.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.blegattclient.services.requests.AddReadingRequest;
 import com.example.blegattclient.services.requests.RegisterVehicleRequest;
@@ -10,7 +11,7 @@ public class IoTService {
     private VolleyServiceAdapter serviceAdapter;
 
     private static IoTService instance;
-    public static IoTService GetIoTService(Context context) {
+    public static IoTService getInstance(Context context) {
         if(instance == null) {
             instance = new IoTService(context);
         }
@@ -50,6 +51,7 @@ public class IoTService {
 
     public void AddReading(final AddReadingRequest readingRequest, final IServiceCallback callback)
     {
+        Log.d("IotService: AddReading",  readingRequest.toString());
         serviceAdapter.GetToken(new IServiceCallback() {
 
             @Override
@@ -62,11 +64,13 @@ public class IoTService {
                 serviceAdapter.AddReading(readingRequest, new IServiceCallback() {
                     @Override
                     public void OnCompleted(Object response) {
+                        Log.d("IotService: AddReading",  "Reading Uploaded Successfully..");
                         callback.OnCompleted(response);
                     }
 
                     @Override
                     public void onError(Object error) {
+                        Log.d("IotService: AddReading",  "Failed to Upload Reading ..");
                         callback.onError(error);
                     }
                 }, (String)response);

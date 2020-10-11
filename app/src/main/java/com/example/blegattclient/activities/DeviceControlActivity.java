@@ -111,7 +111,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                         final BluetoothGattCharacteristic characteristic =
                                 mGattCharacteristics.get(groupPosition).get(childPosition);
                         final int charaProp = characteristic.getProperties();
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                        /*if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
                             // it first so it doesn't update the data field on the user interface.
                             if (mNotifyCharacteristic != null) {
@@ -125,7 +125,10 @@ public class DeviceControlActivity extends AppCompatActivity {
                             mNotifyCharacteristic = characteristic;
                             mBluetoothLeService.setCharacteristicNotification(
                                     characteristic, true);
-                        }
+                        }*/
+                        mBluetoothLeService.readCharacteristic(characteristic);
+                        mBluetoothLeService.setCharacteristicNotification(
+                                characteristic, true);
                         return true;
                     }
                     return false;
@@ -231,9 +234,10 @@ public class DeviceControlActivity extends AppCompatActivity {
 
     private void displayData(String data) {
         if (data != null) {
-            data = removeNonDigits(data);
-            mDataField.setText( String.format("%s - %s", data, data.contains("00") ? "We are good!" : "We aren't good!"));
-            mDataField.setBackground(data.contains("00") ? getResources().getDrawable(R.drawable.bg_blue) : getResources().getDrawable(R.drawable.bg_red));
+            //data = removeNonDigits(data);
+            //mDataField.setText( String.format("%s - %s", data, data.contains("00") ? "We are good!" : "We aren't good!"));
+            //mDataField.setBackground(data.contains("00") ? getResources().getDrawable(R.drawable.bg_blue) : getResources().getDrawable(R.drawable.bg_red));
+            mDataField.setText(data + "\n" + mDataField.getText());
         }
     }
 

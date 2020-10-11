@@ -30,12 +30,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.blegattclient.BaseActivity;
 import com.example.blegattclient.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeviceScanActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class DeviceScanActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private ListView listView;
     private LeDeviceListAdapter mLeDeviceListAdapter;
@@ -44,8 +45,8 @@ public class DeviceScanActivity extends AppCompatActivity implements AdapterView
     private Handler mHandler;
 
     private static final int REQUEST_ENABLE_BT = 1;
-    // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 10000;
+    // Stops scanning after 8 seconds.
+    private static final long SCAN_PERIOD = 8000;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -159,33 +160,8 @@ public class DeviceScanActivity extends AppCompatActivity implements AdapterView
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        if (!mScanning) {
-            menu.findItem(R.id.menu_stop).setVisible(false);
-            menu.findItem(R.id.menu_scan).setVisible(true);
-            menu.findItem(R.id.menu_refresh).setActionView(null);
-        } else {
-            menu.findItem(R.id.menu_stop).setVisible(true);
-            menu.findItem(R.id.menu_scan).setVisible(false);
-            menu.findItem(R.id.menu_refresh).setActionView(
-                    R.layout.actionbar_indeterminate_progress);
-        }
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_scan:
-                if(mLeDeviceListAdapter != null) {
-                    mLeDeviceListAdapter.clear();
-                }
-                checkBluetoothManager();
-                break;
-            case R.id.menu_stop:
-                scanLeDevice(false);
-                break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -221,10 +197,12 @@ public class DeviceScanActivity extends AppCompatActivity implements AdapterView
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
+        //final Intent intent = new Intent(this, DeviceControlActivity.class);
         final Intent intent = new Intent(this, DeviceReadingsActivity.class);
         intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
         if (mScanning) {
+            hideProgressDialog();
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mScanning = false;
         }
@@ -238,15 +216,18 @@ public class DeviceScanActivity extends AppCompatActivity implements AdapterView
                 @Override
                 public void run() {
                     mScanning = false;
+                    hideProgressDialog();
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
                     invalidateOptionsMenu();
                 }
             }, SCAN_PERIOD);
 
             mScanning = true;
+            showProgressDialog();
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
             mScanning = false;
+            hideProgressDialog();
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
         invalidateOptionsMenu();

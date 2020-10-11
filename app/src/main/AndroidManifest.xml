@@ -28,7 +28,9 @@
         <activity android:name=".activities.RegisterActivity"/>
         <activity android:name=".activities.MenuActivity"/>
         <activity android:name=".activities.DeviceReadingsActivity"/>
+        <activity android:name=".activities.HistoryActivity"/>
         <service android:name=".ble.BluetoothLeService" android:enabled="true"/>
+        <service android:name=".location.LocationService" android:enabled="true" />
     </application>
 
 </manifest>

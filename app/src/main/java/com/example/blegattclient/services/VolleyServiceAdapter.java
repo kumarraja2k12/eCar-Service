@@ -173,7 +173,7 @@ public class VolleyServiceAdapter {
             public void onResponse(JSONObject response) {
                 AddReadingResponse vehicleResponse = null;
                 try {
-                    String Status = response.getString("Status");
+                    String Status = response.getString("RequestStatus");
 
                     vehicleResponse = new AddReadingResponse();
                     vehicleResponse.Status = Status;
