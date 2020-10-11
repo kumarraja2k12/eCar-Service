@@ -16,7 +16,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.careservice.BaseActivity;
 import com.example.careservice.R;
-import com.example.careservice.storage.preferences.Preferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +32,8 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
 
-                String vehicleNumber = Preferences.getInstance(getApplicationContext()).readVehicleNumber();
-                if(vehicleNumber == null || vehicleNumber.isEmpty())
                 {
-                    Intent i = new Intent(SplashActivity.this, RegisterActivity.class);
-                    startActivity(i);
-                    finish();
-                } else {
-                    Intent i = new Intent(SplashActivity.this, MenuActivity.class);
+                    Intent i = new Intent(SplashActivity.this, FaultyVehiclesActivity.class);
                     startActivity(i);
                     finish();
                 }

@@ -12,9 +12,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.careservice.services.requests.AddReadingRequest;
+import com.example.careservice.services.requests.CreateWorkOrderRequest;
 import com.example.careservice.services.requests.RegisterVehicleRequest;
 import com.example.careservice.services.responses.AddReadingResponse;
 import com.example.careservice.services.responses.ErrorResponse;
+import com.example.careservice.services.pojo.FaultyVehicle;
+import com.example.careservice.services.responses.FaultyVehiclesResponse;
 import com.example.careservice.services.responses.RegisterVehicleResponse;
 import com.google.gson.Gson;
 
@@ -215,4 +218,118 @@ public class VolleyServiceAdapter {
         queue.add(postRequest);
     }
 
+    public void GetFaultyVehicles(final IServiceCallback callback, final String accessToken) {
+
+        String url = baseUrl + "/api/services/SKAIoTServiceGroup/SKAIoTAssetService/getFaultyVehicles";
+
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                FaultyVehiclesResponse vehiclesResponse = new FaultyVehiclesResponse();
+                try {
+                    JSONArray vehiclesArray = response.getJSONArray("Vehicles");
+                    for(int counter = 0; counter < vehiclesArray.length(); counter++) {
+                        FaultyVehicle vehicle = new FaultyVehicle();
+                        JSONObject vehicleObject = vehiclesArray.getJSONObject(counter);
+                        vehicle.activeWorkOrders = vehicleObject.getString("ActiveWorkOrders");
+                        vehicle.phone = vehicleObject.getString("Phone");
+                        vehicle.customerName = vehicleObject.getString("CustomerName");
+                        vehicle.registrationNumber = vehicleObject.getString("RegistrationNumber");
+                        vehiclesResponse.vehicles.add(vehicle);
+                    }
+                    callback.OnCompleted(vehiclesResponse);
+                } catch (Exception e) {
+                    callback.onError(ErrorResponse.UnknownError());
+                    return;
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    Log.d("Error", new String(error.networkResponse.data));
+                    Log.d("Error.Response", Objects.requireNonNull(error.getMessage()));
+                    callback.onError(new Gson().fromJson(new String(error.networkResponse.data), ErrorResponse.class));
+                } catch (Exception ex) {
+                    try {
+                        callback.onError(new Gson().fromJson(new String(error.networkResponse.data), ErrorResponse.class));
+                    } catch (Exception ex2) {
+                        callback.onError(ErrorResponse.UnknownError());
+                    }
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders()
+            {
+                Map<String, String> obj = new HashMap<String, String>();
+                obj.put("Authorization", "Bearer " + accessToken);
+                return obj;
+            }
+        };
+
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        queue.add(postRequest);
+    }
+
+    public void CreateWorkOrder(final CreateWorkOrderRequest readingRequest, final IServiceCallback callback, final String accessToken) {
+
+        String url = baseUrl + "/api/services/SKAIoTServiceGroup/SKAIoTAssetService/createWorkOrder";
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("_registrationNumber", readingRequest.vehicleNumber);
+        } catch (Exception e) {
+            callback.onError(ErrorResponse.UnknownError());
+        }
+
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                AddReadingResponse vehicleResponse = null;
+                try {
+                    String Status = response.getString("RequestStatus");
+
+                    vehicleResponse = new AddReadingResponse();
+                    vehicleResponse.Status = Status;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                callback.OnCompleted(vehicleResponse);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    Log.d("Error", new String(error.networkResponse.data));
+                    Log.d("Error.Response", Objects.requireNonNull(error.getMessage()));
+                    callback.onError(new Gson().fromJson(new String(error.networkResponse.data), ErrorResponse.class));
+                } catch (Exception ex) {
+                    try {
+                        callback.onError(new Gson().fromJson(new String(error.networkResponse.data), ErrorResponse.class));
+                    } catch (Exception ex2) {
+                        callback.onError(ErrorResponse.UnknownError());
+                    }
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders()
+            {
+                Map<String, String> obj = new HashMap<String, String>();
+                obj.put("Authorization", "Bearer " + accessToken);
+                return obj;
+            }
+        };
+
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        queue.add(postRequest);
+    }
 }

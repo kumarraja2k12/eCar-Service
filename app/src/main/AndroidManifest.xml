@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -17,20 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.careservice.activities.DeviceScanActivity"/>
         <activity android:name="com.example.careservice.activities.SplashActivity" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.careservice.activities.DeviceControlActivity"/>
-        <activity android:name="com.example.careservice.activities.RegisterActivity"/>
-        <activity android:name="com.example.careservice.activities.MenuActivity"/>
-        <activity android:name="com.example.careservice.activities.DeviceReadingsActivity"/>
-        <activity android:name="com.example.careservice.activities.HistoryActivity"/>
-        <service android:name="com.example.careservice.ble.BluetoothLeService" android:enabled="true"/>
-        <service android:name="com.example.careservice.location.LocationService" android:enabled="true" />
+        <activity android:name="com.example.careservice.activities.FaultyVehiclesActivity"/>
+        <activity android:name="com.example.careservice.activities.VehicleDetailsActivity" android:exported="true"/>
     </application>
 
 </manifest>

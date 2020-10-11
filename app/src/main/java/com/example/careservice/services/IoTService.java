@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.careservice.services.requests.AddReadingRequest;
+import com.example.careservice.services.requests.CreateWorkOrderRequest;
 import com.example.careservice.services.requests.RegisterVehicleRequest;
 
 public class IoTService {
@@ -71,6 +72,63 @@ public class IoTService {
                     @Override
                     public void onError(Object error) {
                         Log.d("IotService: AddReading",  "Failed to Upload Reading ..");
+                        callback.onError(error);
+                    }
+                }, (String)response);
+            }
+        });
+    }
+
+    public void GetFaultyVehicles(final IServiceCallback callback)
+    {
+        serviceAdapter.GetToken(new IServiceCallback() {
+
+            @Override
+            public void onError(Object error) {
+                //Do nothing
+            }
+
+            @Override
+            public void OnCompleted(Object response) {
+                serviceAdapter.GetFaultyVehicles(new IServiceCallback() {
+                    @Override
+                    public void OnCompleted(Object response) {
+                        Log.d("IotService:",  "GetFaultyVehicles Success..");
+                        callback.OnCompleted(response);
+                    }
+
+                    @Override
+                    public void onError(Object error) {
+                        Log.d("IotService:",  "GetFaultyVehicles failure..");
+                        callback.onError(error);
+                    }
+                }, (String)response);
+            }
+        });
+    }
+
+    public void CreateWorkOrder(final CreateWorkOrderRequest readingRequest, final IServiceCallback callback)
+    {
+        Log.d("IotService: AddReading",  readingRequest.toString());
+        serviceAdapter.GetToken(new IServiceCallback() {
+
+            @Override
+            public void onError(Object error) {
+                //Do nothing
+            }
+
+            @Override
+            public void OnCompleted(Object response) {
+                serviceAdapter.CreateWorkOrder(readingRequest, new IServiceCallback() {
+                    @Override
+                    public void OnCompleted(Object response) {
+                        Log.d("IotService",  " CreateWorkOrder: Successfully..");
+                        callback.OnCompleted(response);
+                    }
+
+                    @Override
+                    public void onError(Object error) {
+                        Log.d("IotService: AddReading",  " CreateWorkOrder: Failed..");
                         callback.onError(error);
                     }
                 }, (String)response);

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,11 +30,13 @@
             android:layout_height="wrap_content"
             android:text="Customer Name:"/>
 
-        <EditText
+        <TextView
             android:id="@+id/edittext_customer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/label_customer_name"
+            tools:text="Praneetha Duggirala"
+            android:textSize="@dimen/margin_large"
             />
 
         <TextView
@@ -46,11 +48,13 @@
             android:layout_height="wrap_content"
             android:text="Phone Number:"/>
 
-        <EditText
+        <TextView
             android:id="@+id/edittext_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/label_phone_number"
+            tools:text="9885658982"
+            android:textSize="@dimen/margin_large"
             />
 
         <TextView
@@ -62,11 +66,13 @@
             android:layout_height="wrap_content"
             android:text="Vehicle Number:"/>
 
-        <EditText
+        <TextView
             android:id="@+id/edittext_vehicle_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/label_vehicle_number"
+            tools:text="TS 08 GE 8403"
+            android:textSize="@dimen/margin_large"
             />
 
         <TextView
@@ -76,25 +82,36 @@
             android:id="@+id/label_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Model:"/>
+            android:text="Active work orders available:"/>
 
-        <EditText
+        <TextView
             android:id="@+id/edittext_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/label_model"
+            tools:text="Yes"
+            android:textSize="@dimen/margin_large"
             />
 
         <Button
             android:layout_marginTop="@dimen/margin_medium"
             app:layout_constraintTop_toBottomOf="@+id/edittext_model"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/button_register"
+            android:id="@+id/button_call_customer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register"
-            android:onClick="Register"/>
+            android:text="Call Customer"
+            android:onClick="CallCustomer"/>
 
+        <Button
+            android:layout_marginTop="@dimen/margin_medium"
+            app:layout_constraintTop_toBottomOf="@+id/button_call_customer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/button_schedule_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Schedule Service"
+            android:onClick="ScheduleService"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
